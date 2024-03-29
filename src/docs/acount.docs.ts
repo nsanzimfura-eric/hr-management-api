@@ -59,9 +59,9 @@
  *           schema:
  *             type: object
  *             properties:
- *               firstName: string
+ *               firstName:
  *                 type: string
- *               lastName: string
+ *               lastName:
  *                 type: string
  *               password:
  *                 type: string
