@@ -14,14 +14,14 @@ class JobsServices {
     title: string,
     description: string,
     deadline: string,
-    creator: User
+    creator_id: string
   ) {
     try {
       const job = new Job();
       job.title = title;
       job.description = description;
       job.deadline = new Date(deadline);
-      job.creator = creator;
+      job.creator_id = creator_id;
 
       return await this.JobsRepository.save(job);
     } catch (error) {
@@ -31,17 +31,16 @@ class JobsServices {
 
   async fetchJobs(): Promise<Job[]> {
     try {
-      return await this.JobsRepository.find({ relations: ["creator"] });
+      return await this.JobsRepository.find();
     } catch (error) {
       throw error;
     }
   }
   // Assuming you want to fetch job creator information alongside each job
-  async fetchJobsByCreator(creator: User): Promise<Job[]> {
+  async fetchJobsByCreator(creator_id: string): Promise<Job[]> {
     try {
       return await this.JobsRepository.find({
-        relations: ["creator"],
-        where: { creator },
+        where: { creator_id },
       });
     } catch (error) {
       throw error;

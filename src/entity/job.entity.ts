@@ -7,6 +7,7 @@ import {
   ManyToMany,
   JoinTable,
   ManyToOne,
+  JoinColumn,
 } from "typeorm";
 import { Candidate } from "./candidate.entity";
 import { User } from "./user.entity";
@@ -21,6 +22,9 @@ export class Job {
 
   @Column()
   description!: string;
+
+  @Column()
+  creator_id!: string;
 
   @Column()
   deadline!: Date;
@@ -43,6 +47,11 @@ export class Job {
   })
   candidates: Candidate[];
 
-  @ManyToOne(() => User, (user) => user.jobs)
+  @ManyToOne(() => User, (user) => user.jobs, {
+    onDelete: "CASCADE",
+    onUpdate: "CASCADE",
+    eager: true,
+  })
+  @JoinColumn({ name: "creator_id" })
   creator: User;
 }

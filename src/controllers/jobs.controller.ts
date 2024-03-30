@@ -12,9 +12,10 @@ const JobsControllers = {
   createJob: async (req: UserInterFace, res: Response): Promise<any> => {
     const { title, deadline, description } = req.body;
     const { user: hr } = req; //this is HR who posts a job
+    console.log(title, deadline, description);
 
     // CHECK IF ALL REQUIRED FIELDS ARE PROVIDED
-    if (!title || !deadline || !deadline || !description) {
+    if (!title || !deadline || !description) {
       return res.status(400).json({
         success: false,
         message: "All fields are required",
@@ -22,18 +23,11 @@ const JobsControllers = {
     }
 
     try {
-      const doesUserExist = await accountServices.findUserById(hr.id);
-      if (!doesUserExist) {
-        return res.status(404).json({
-          success: false,
-          message: "HR does not exist",
-        });
-      }
       const data = await jobsServices.createJob(
         title,
         description,
         deadline,
-        doesUserExist
+        hr.id
       );
 
       // RETURN RESPONSE
@@ -89,8 +83,7 @@ const JobsControllers = {
       let data: Job[] | [] = [];
       //if the user exists, means it is HR, so we give him jobs he only created
       if (user) {
-        const doesUserExist = await accountServices.findUserById(user.id);
-        data = await jobsServices.fetchJobsByCreator(doesUserExist);
+        data = await jobsServices.fetchJobsByCreator(user.id);
       } else {
         data = await jobsServices.fetchJobs();
       }

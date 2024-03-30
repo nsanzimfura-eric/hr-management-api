@@ -13,9 +13,5 @@ JobsRoutes.get(
   JobsControllers.getAllJobs
 );
 
-JobsRoutes.delete(
-  "/deleteJob/:jobId",
-  isAuthenticated,
-  JobsControllers.deleteJob
-);
+JobsRoutes.delete("/delete/:jobId", isAuthenticated, JobsControllers.deleteJob);
 export default JobsRoutes;
