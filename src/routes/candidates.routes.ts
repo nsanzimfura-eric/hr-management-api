@@ -3,8 +3,6 @@ import CandidatesController from "../controllers/candidates.controller";
 
 const CandidatesRoutes = express.Router();
 
-CandidatesRoutes.post("/login", CandidatesController.login);
-
-CandidatesRoutes.post("/signup", CandidatesController.create);
+CandidatesRoutes.post("/apply/:jobId", CandidatesController.Apply);
 
 export default CandidatesRoutes;

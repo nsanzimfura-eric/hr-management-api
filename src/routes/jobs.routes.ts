@@ -1,10 +1,8 @@
 import express from "express";
 import JobsControllers from "../controllers/jobs.controller";
+import isAuthenticated from "../middlewares/isAuthenticated";
 
 const JobsRoutes = express.Router();
 
-JobsRoutes.post("/login", JobsControllers.login);
-
-JobsRoutes.post("/signup", JobsControllers.create);
-
+JobsRoutes.post("/createJob", isAuthenticated, JobsControllers.createJob);
 export default JobsRoutes;

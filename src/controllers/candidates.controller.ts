@@ -5,8 +5,9 @@ const AccountService = new AccountServiceClass();
 
 const CandidatesController = {
   // CREATE ADMIN
-  create: async (req: Request, res: Response): Promise<any> => {
-    const { firstName, lastName, email, password } = req.body;
+  Apply: async (req: Request, res: Response): Promise<any> => {
+    const { jobId } = req.params;
+    const { name, lastName, email, password } = req.body;
 
     // CHECK IF ALL REQUIRED FIELDS ARE PROVIDED
     if (!firstName || !lastName || !email || !password) {
@@ -56,47 +57,6 @@ const CandidatesController = {
       return res.status(500).json({
         success: false,
         message: err?.message,
-      });
-    }
-  },
-
-  // LOGIN
-  login: async (req: Request, res: Response): Promise<any> => {
-    const { email, password } = req.body;
-
-    if (!email || !password!)
-      return res.status(400).json({
-        success: false,
-        message: "Email and password are required!",
-      });
-
-    const lowerCaseEmail = email.trim().toLowerCase();
-
-    const userByEmail = await AccountService.findUserByEmail(lowerCaseEmail);
-
-    if (!userByEmail)
-      return res.status(404).json({
-        success: false,
-        message: "User with the email not found",
-      });
-
-    try {
-      const data = await AccountService.login(userByEmail, password);
-
-      if (!data)
-        return res.status(400).json({
-          success: false,
-          message: "Email or password not correct",
-        });
-
-      return res.status(200).json({
-        success: true,
-        data,
-      });
-    } catch (error) {
-      return res.status(500).json({
-        success: false,
-        message: error.message,
       });
     }
   },

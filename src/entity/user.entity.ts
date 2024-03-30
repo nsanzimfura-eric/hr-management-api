@@ -6,7 +6,9 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
   Unique,
+  OneToMany,
 } from "typeorm";
+import { Job } from "./job.entity";
 
 @Entity()
 @Unique(["email"])
@@ -34,4 +36,7 @@ export class User {
 
   @DeleteDateColumn()
   deletedAt?: Date;
+
+  @OneToMany(() => Job, (job) => job.creator)
+  jobs: Job[];
 }
