@@ -35,11 +35,12 @@
  *                   description: Error message.
  * /api/v1/jobs/createJob:
  *   post:
- *     security:
- *       - bearerAuth: []
- *     summary: Create a new job.
+ *     summary: Create new job
+ *     description: You can create new Job if you are HR or signed in as HR.
  *     tags:
  *       - Jobs
+ *     security:
+ *       - bearerAuth: []
  *     requestBody:
  *       required: true
  *       content:
@@ -58,7 +59,7 @@
  *                 type: string
  *                 description: Detailed description of the job.
  *     responses:
- *       200:
+ *       201:
  *         description: Job created successfully.
  *         content:
  *           application/json:
@@ -250,9 +251,4 @@
  *         lastName:
  *           type: string
  *           description: The user's last name.
- * securitySchemes:
- *   bearerAuth:
- *     type: http
- *     scheme: bearer
- *     bearerFormat: JWT
  */
