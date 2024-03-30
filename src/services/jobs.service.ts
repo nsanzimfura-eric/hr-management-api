@@ -40,6 +40,7 @@ class JobsServices {
   async fetchJobsByCreator(creator_id: string): Promise<Job[]> {
     try {
       return await this.JobsRepository.find({
+        relations: { candidates: true },
         where: { creator_id },
       });
     } catch (error) {
@@ -48,9 +49,14 @@ class JobsServices {
   }
   async findJobById(id: string): Promise<Job | null> {
     try {
-      const job = await this.JobsRepository.findOneBy({
-        id,
-      });
+      const job = await this.JobsRepository.createQueryBuilder("job")
+        .leftJoinAndSelect("job.candidates", "candidate")
+        .where("job.id = :id", { id })
+        .getOne();
+
+      // const job = await this.JobsRepository.findOneBy({
+      //   id,
+      // });
       if (!job) return null;
 
       return job;

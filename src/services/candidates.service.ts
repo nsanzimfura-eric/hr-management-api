@@ -31,13 +31,12 @@ class CandidateService {
       if (linkedin) candidate.linkedin = linkedin;
       if (web) candidate.web = web;
       candidate.resume = resume;
-      const newCandidate = await this.CandidateRepository.save(candidate);
+      await this.CandidateRepository.save(candidate);
 
       // updateJob
       job.candidates.push(candidate);
-      await this.JobsRepository.save(job);
 
-      return newCandidate;
+      return await this.JobsRepository.save(job);
     } catch (error) {
       throw error;
     }
@@ -59,19 +58,18 @@ class CandidateService {
       if (linkedin) candidate.linkedin = linkedin;
       if (web) candidate.web = web;
 
-      const candidateUpdated = await this.CandidateRepository.save(candidate);
+      await this.CandidateRepository.save(candidate);
 
       // updateJob to replace the candidate
-      job.candidates.map((user) => {
+      job.candidates?.map((user) => {
         let newCandid = user;
         if (newCandid.id === candidate.id) {
           newCandid = candidate;
         }
         return newCandid;
       });
-      await this.JobsRepository.save(job);
 
-      return candidateUpdated;
+      return await this.JobsRepository.save(job);
     } catch (error) {
       throw error;
     }
