@@ -54,7 +54,6 @@ class CandidateService {
       if (linkedin) candidate.linkedin = linkedin;
       if (web) candidate.web = web;
       //update job;
-      // candidate.jobs = job;
       candidate.jobs.map((singleJob) => {
         let jobNeeded = singleJob;
         if (jobNeeded.id === job.id) {

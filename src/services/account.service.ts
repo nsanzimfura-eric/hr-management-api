@@ -20,14 +20,15 @@ class AccountService {
     email: string,
     password: string
   ) {
-    const hashedPassword = hashString(password);
+    const hashedPassword = await hashString(password);
     try {
-      const newUser = await this.UserRepository.save({
-        firstName,
-        lastName,
-        email,
-        password: hashedPassword,
-      });
+      const user = new User();
+      user.firstName = firstName;
+      user.lastName = lastName;
+      user.email = email;
+      user.password = hashedPassword;
+
+      const newUser = await this.UserRepository.save(user);
 
       return newUser;
     } catch (error) {

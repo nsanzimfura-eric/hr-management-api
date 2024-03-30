@@ -1,6 +1,8 @@
 import "reflect-metadata";
 import { DataSource } from "typeorm";
 import { User } from "./entity/user.entity";
+import { Candidate } from "./entity/candidate.entity";
+import { Job } from "./entity/job.entity";
 
 export const AppDataSource = new DataSource({
   name: "default",
@@ -12,7 +14,7 @@ export const AppDataSource = new DataSource({
   database: process.env.DB_NAME,
   synchronize: process.env.NODE_ENV === "development",
   logging: false,
-  entities: [User],
+  entities: [User, Candidate, Job],
   migrations: [],
   subscribers: [],
   extra: {
