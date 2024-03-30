@@ -33,20 +33,40 @@ const CandidatesController = {
           message: "Job No longer exists",
         });
       }
-      //upload to resume cloudinary
-      const result = await cloudinary.uploader.upload(resume.path);
-      const neededResume: string = result.secure_url;
-      // CHECK IF USER EXISTS
+      // CHECK IF Candidate EXISTS
       const doesEmailExist = await candidateServices.findCandidateByEmail(
         lowerCaseEmail
       );
-      let data: any = null;
-      // IF EMAIL EXISTS
+
+      // check if user has applied to this job before;
       if (doesEmailExist) {
-        //update jobs to add candidate
-        // data = await candidateServices.update
+        const jobAlreadyExists = doesEmailExist.jobs.some(
+          (candidateJob) => candidateJob.id === jobId
+        );
+        if (jobAlreadyExists) {
+          return res.status(400).json({
+            success: false,
+            message: "You have already applied to this job",
+          });
+        }
+      }
+
+      //upload to resume cloudinary
+      const result = await cloudinary.uploader.upload(resume.path);
+      const neededResume: string = result.secure_url;
+
+      let data: any = null;
+      if (doesEmailExist) {
+        await candidateServices.updateCandidate(
+          doesEmailExist,
+          phone,
+          github,
+          linkedin,
+          web,
+          neededResume,
+          doesJobExists
+        );
       } else {
-        // CREATE candidate
         data = await candidateServices.createCandidate(
           name,
           email,

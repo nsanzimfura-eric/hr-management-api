@@ -17,26 +17,21 @@ class CandidateService {
     github: string,
     linkedin: string,
     web: string,
-    neededResume: string,
-    doesJobExists: Job
+    resume: string,
+    job: Job
   ) {
     try {
       const candidate = new Candidate();
       candidate.name = name;
       candidate.email = email;
       candidate.phone = phone;
-      candidate.github = github;
-      candidate.linkedin = linkedin;
-      candidate.web = web;
-      candidate.resume = neededResume;
-      candidate.jobs = doesJobExists;
+      if (github) candidate.github = github;
+      if (linkedin) candidate.linkedin = linkedin;
+      if (web) candidate.web = web;
+      candidate.resume = resume;
+      candidate.jobs = [...candidate.jobs, job];
 
-      const newCandidate = await this.CandidateRepository.save({
-        name,
-        email,
-        profile,
-        phone,
-      });
+      const newCandidate = await this.CandidateRepository.save(candidate);
 
       return newCandidate;
     } catch (error) {
@@ -49,34 +44,24 @@ class CandidateService {
     github: string,
     linkedin: string,
     web: string,
-    neededResume: string,
+    resume: string,
     job: Job
   ) {
     try {
       candidate.phone = phone;
-      candidate.resume = neededResume;
+      candidate.resume = resume;
       if (github) candidate.github = github;
       if (linkedin) candidate.linkedin = linkedin;
       if (web) candidate.web = web;
-
-      const jobAlreadyExists = candidate.jobs.some(
-        (candidateJob) => candidateJob.id === job.id
-      );
-      // update job
-      if (!jobAlreadyExists) {
-        // If not, add this job to the candidate's list of jobs
-        candidate.jobs = [...candidate.jobs, job];
-        const candidateAlreadyExists = job.candidates.some(
-          (jobCandidate) => jobCandidate.id === candidate.id
-        );
-
-        if (!candidateAlreadyExists) {
-          // If not, add this candidate to the job's list of candidates
-          job.candidates = [...job.candidates, candidate];
-          // Save the job entity if needed
-          await this.JobRepository.save(job);
+      //update job;
+      // candidate.jobs = job;
+      candidate.jobs.map((singleJob) => {
+        let jobNeeded = singleJob;
+        if (jobNeeded.id === job.id) {
+          jobNeeded = job;
         }
-      }
+        return jobNeeded;
+      });
 
       return await this.CandidateRepository.save(candidate);
     } catch (error) {
