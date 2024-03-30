@@ -1,8 +1,9 @@
+import { Repository } from "typeorm";
 import { AppDataSource } from "../data-source";
 import { Candidate } from "../entity/candidate.entity";
 
 class CandidateService {
-  private CandidateRepository: any;
+  private CandidateRepository: Repository<Candidate>;
 
   constructor() {
     this.CandidateRepository = AppDataSource.getRepository(Candidate);
@@ -25,6 +26,18 @@ class CandidateService {
       return newCandidate;
     } catch (error) {
       throw error;
+    }
+  }
+  async findCandidateByEmail(email: string): Promise<Candidate | null> {
+    try {
+      const candidate = await this.CandidateRepository.findOneBy({ email });
+
+      if (!candidate) {
+        return null;
+      }
+      return candidate;
+    } catch (error) {
+      return error;
     }
   }
 }

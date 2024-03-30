@@ -4,9 +4,10 @@ import { generateToken } from "../helpers/jwt_tokens.helper";
 import transformUserToDTO from "../helpers/transformUserToDTO.helper";
 import { UserDTO } from "../DTOs/user.dto";
 import { hashString, verifyStringHash } from "../helpers/functions.helpers";
+import { Repository } from "typeorm";
 
 class AccountService {
-  private UserRepository: any;
+  private UserRepository: Repository<User>;
 
   constructor() {
     this.UserRepository = AppDataSource.getRepository(User);
@@ -62,14 +63,14 @@ class AccountService {
   }
 
   // FIND USER BY ID
-  async findUserById(id: string): Promise<UserDTO | null> {
+  async findUserById(id: string): Promise<User | null> {
     try {
       const user = await this.UserRepository.findOneBy({
         id,
       });
       if (!user) return null;
 
-      return transformUserToDTO(user);
+      return user;
     } catch (error) {
       throw error;
     }

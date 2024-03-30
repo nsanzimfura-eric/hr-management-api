@@ -1,53 +1,43 @@
 import { Request, Response } from "express";
-import AccountServiceClass from "../services/account.service";
+import CandidateService from "../services/candidates.service";
 
-const AccountService = new AccountServiceClass();
+const candidateServices = new CandidateService();
 
 const CandidatesController = {
-  // CREATE ADMIN
-  Apply: async (req: Request, res: Response): Promise<any> => {
+  Apply: async (req: any, res: Response): Promise<any> => {
     const { jobId } = req.params;
-    const { name, lastName, email, password } = req.body;
+    const { name, email, phone, github, linkedin, web } = req.body;
+    //candidate resume
+    const resume = req.file;
 
     // CHECK IF ALL REQUIRED FIELDS ARE PROVIDED
-    if (!firstName || !lastName || !email || !password) {
+    if (!name || !resume || !email || !phone) {
       return res.status(400).json({
         success: false,
-        message: "Names and email are required",
+        message: "Resume,name, email, and phone are required",
       });
     }
 
     let lowerCaseEmail = email;
-    if (email) {
-      lowerCaseEmail = email.trim().toLowerCase();
+    lowerCaseEmail = email.trim().toLowerCase();
 
+    try {
       // CHECK IF USER EXISTS
-      const doesEmailExist = await AccountService.findUserByEmail(
+      const doesEmailExist = await candidateServices.findCandidateByEmail(
         lowerCaseEmail
       );
 
       // IF EMAIL EXISTS
-      if (doesEmailExist)
-        return res.status(409).json({
-          success: false,
-          message: "Email already exists",
-        });
-    }
+      if (doesEmailExist) {
+        //update jobs to add candidate
+      }
 
-    try {
       // CREATE USER
-      const user = await AccountService.createUser(
-        firstName,
-        lastName,
-        lowerCaseEmail,
-        password
-      );
 
       // RETURN RESPONSE
       return res.status(201).json({
         success: true,
         data: {
-          ...user,
           password: undefined,
         },
       });

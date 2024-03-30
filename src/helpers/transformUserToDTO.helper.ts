@@ -7,9 +7,6 @@ function transformUserToDTO(user: User): UserDTO {
   userDTO.firstName = user.firstName;
   userDTO.lastName = user.lastName;
   userDTO.email = user.email;
-  userDTO.createdAt = user.createdAt;
-  userDTO.updatedAt = user.updatedAt;
-  userDTO.deletedAt = user.deletedAt || null;
 
   return userDTO;
 }
