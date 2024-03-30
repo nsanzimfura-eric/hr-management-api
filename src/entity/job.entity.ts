@@ -31,8 +31,16 @@ export class Job {
   @UpdateDateColumn({ name: "updated_at" })
   updatedAt!: Date;
 
-  @ManyToMany(() => Candidate, (candidate) => candidate.jobs)
-  @JoinTable()
+  @ManyToMany(() => Candidate, (candidate) => candidate.jobs, {
+    onDelete: "CASCADE",
+    onUpdate: "CASCADE",
+    eager: false,
+  })
+  @JoinTable({
+    name: "jobs_candidates",
+    joinColumn: { name: "job_id", referencedColumnName: "id" },
+    inverseJoinColumn: { name: "candidate_id", referencedColumnName: "id" },
+  })
   candidates: Candidate[];
 
   @ManyToOne(() => User, (user) => user.jobs)

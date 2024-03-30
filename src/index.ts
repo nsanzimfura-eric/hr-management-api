@@ -18,7 +18,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(morgan("dev"));
 app.use(express.static("public"));
 
-const port = process.env.APP_PORT || 8080;
+const port = process.env.APP_PORT || 8000;
 const swaggerDocument = swaggerJSDoc(swaggerDocumentOptions);
 
 app.get("/", (req, res) => {

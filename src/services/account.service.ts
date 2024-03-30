@@ -38,8 +38,18 @@ class AccountService {
 
   // LOGIN USER
   async login(user: UserDTO, password: string): Promise<any> {
+    const userWithPassword = await this.UserRepository.createQueryBuilder(
+      "user"
+    )
+      .where("user.id = :id", { id: user.id })
+      .addSelect("user.password")
+      .getOne();
+
     try {
-      const passwordMatch = await verifyStringHash(password, user.password);
+      const passwordMatch = await verifyStringHash(
+        password,
+        userWithPassword.password
+      );
       if (!passwordMatch) {
         return false;
       }

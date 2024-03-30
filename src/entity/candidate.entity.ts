@@ -5,6 +5,7 @@ import {
   ManyToMany,
   CreateDateColumn,
   UpdateDateColumn,
+  JoinTable,
 } from "typeorm";
 import { Job } from "./job.entity";
 
@@ -47,5 +48,10 @@ export class Candidate {
   updatedAt!: Date;
 
   @ManyToMany(() => Job, (job) => job.candidates)
+  @JoinTable({
+    name: "jobs_candidates",
+    joinColumn: { name: "candidate_id", referencedColumnName: "id" },
+    inverseJoinColumn: { name: "job_id", referencedColumnName: "id" },
+  })
   jobs!: Job[];
 }
