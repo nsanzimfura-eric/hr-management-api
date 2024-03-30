@@ -12,7 +12,6 @@ const JobsControllers = {
   createJob: async (req: UserInterFace, res: Response): Promise<any> => {
     const { title, deadline, description } = req.body;
     const { user: hr } = req; //this is HR who posts a job
-    console.log(title, deadline, description);
 
     // CHECK IF ALL REQUIRED FIELDS ARE PROVIDED
     if (!title || !deadline || !description) {

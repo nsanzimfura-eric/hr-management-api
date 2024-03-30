@@ -5,9 +5,11 @@ import { Job } from "../entity/job.entity";
 
 class CandidateService {
   private CandidateRepository: Repository<Candidate>;
+  private JobsRepository: Repository<Job>;
 
   constructor() {
     this.CandidateRepository = AppDataSource.getRepository(Candidate);
+    this.JobsRepository = AppDataSource.getRepository(Job);
   }
 
   async createCandidate(
@@ -29,9 +31,11 @@ class CandidateService {
       if (linkedin) candidate.linkedin = linkedin;
       if (web) candidate.web = web;
       candidate.resume = resume;
-      candidate.jobs = [...candidate.jobs, job];
-
       const newCandidate = await this.CandidateRepository.save(candidate);
+
+      // updateJob
+      job.candidates.push(candidate);
+      await this.JobsRepository.save(job);
 
       return newCandidate;
     } catch (error) {
@@ -48,21 +52,26 @@ class CandidateService {
     job: Job
   ) {
     try {
+      // we can get update data from applicant
       candidate.phone = phone;
       candidate.resume = resume;
       if (github) candidate.github = github;
       if (linkedin) candidate.linkedin = linkedin;
       if (web) candidate.web = web;
-      //update job;
-      candidate.jobs.map((singleJob) => {
-        let jobNeeded = singleJob;
-        if (jobNeeded.id === job.id) {
-          jobNeeded = job;
-        }
-        return jobNeeded;
-      });
 
-      return await this.CandidateRepository.save(candidate);
+      const candidateUpdated = await this.CandidateRepository.save(candidate);
+
+      // updateJob to replace the candidate
+      job.candidates.map((user) => {
+        let newCandid = user;
+        if (newCandid.id === candidate.id) {
+          newCandid = candidate;
+        }
+        return newCandid;
+      });
+      await this.JobsRepository.save(job);
+
+      return candidateUpdated;
     } catch (error) {
       throw error;
     }

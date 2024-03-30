@@ -11,13 +11,19 @@ const CandidatesController = {
     const { jobId } = req.params;
     const { name, email, phone, github, linkedin, web } = req.body;
     //candidate resume
-    const { file: resume } = req;
-
+    const { file } = req;
     // CHECK IF ALL REQUIRED FIELDS ARE PROVIDED
-    if (!name || !resume || !email || !phone) {
+    if (!name || !file || !email || !phone) {
       return res.status(400).json({
         success: false,
         message: "Resume,name, email, and phone are required",
+      });
+    }
+    //only allow pdf files
+    if (file.mimetype !== "application/pdf") {
+      return res.status(400).json({
+        success: false,
+        message: "Only pdf files plz",
       });
     }
 
@@ -38,12 +44,12 @@ const CandidatesController = {
         lowerCaseEmail
       );
 
-      // check if user has applied to this job before;
+      // check if user has applied to this job before, he is in the jobs candidates;
       if (doesEmailExist) {
-        const jobAlreadyExists = doesEmailExist.jobs.some(
-          (candidateJob) => candidateJob.id === jobId
+        const hasUserApplied = doesJobExists.candidates?.some(
+          (candidate) => candidate.id === doesEmailExist.id
         );
-        if (jobAlreadyExists) {
+        if (hasUserApplied) {
           return res.status(400).json({
             success: false,
             message: "You have already applied to this job",
@@ -52,7 +58,9 @@ const CandidatesController = {
       }
 
       //upload to resume cloudinary
-      const result = await cloudinary.uploader.upload(resume.path);
+      const base64String = file.buffer.toString("base64");
+      const fileBase64 = `data:${file.mimetype};base64,${base64String}`;
+      const result = await cloudinary.uploader.upload(fileBase64);
       const neededResume: string = result.secure_url;
 
       let data: any = null;

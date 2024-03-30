@@ -2,12 +2,9 @@ import {
   Entity,
   PrimaryGeneratedColumn,
   Column,
-  ManyToMany,
   CreateDateColumn,
   UpdateDateColumn,
-  JoinTable,
 } from "typeorm";
-import { Job } from "./job.entity";
 
 @Entity()
 export class Candidate {
@@ -46,12 +43,4 @@ export class Candidate {
 
   @UpdateDateColumn({ name: "updated_at" })
   updatedAt!: Date;
-
-  @ManyToMany(() => Job, (job) => job.candidates)
-  @JoinTable({
-    name: "jobs_candidates",
-    joinColumn: { name: "candidate_id", referencedColumnName: "id" },
-    inverseJoinColumn: { name: "job_id", referencedColumnName: "id" },
-  })
-  jobs!: Job[];
 }
