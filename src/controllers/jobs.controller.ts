@@ -1,11 +1,8 @@
-import { Request, Response } from "express";
+import { Response } from "express";
 import JobsServices from "../services/jobs.service";
 import { UserInterFace } from "../middlewares/isAuthenticated";
-import AccountService from "../services/account.service";
-import { Job } from "../entity/job.entity";
 
 const jobsServices = new JobsServices();
-const accountServices = new AccountService();
 
 const JobsControllers = {
   // CREATE job by HR
@@ -72,20 +69,9 @@ const JobsControllers = {
     }
   },
   //get all jobs
-  getAllJobs: async (
-    req: UserInterFace | Request,
-    res: Response
-  ): Promise<any> => {
-    const { user } = req as UserInterFace;
-
+  getAllJobs: async (_, res: Response): Promise<any> => {
     try {
-      let data: Job[] | [] = [];
-      //if the user exists, means it is HR, so we give him jobs he only created
-      if (user) {
-        data = await jobsServices.fetchJobsByCreator(user.id);
-      } else {
-        data = await jobsServices.fetchJobs();
-      }
+      const data = await jobsServices.fetchJobs();
 
       // RETURN RESPONSE
       return res.status(200).json({

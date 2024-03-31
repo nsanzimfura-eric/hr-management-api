@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import { Response } from "express";
 import CandidateService from "../services/candidates.service";
 import cloudinary from "../config/cloudinary.config";
 import JobsServices from "../services/jobs.service";
