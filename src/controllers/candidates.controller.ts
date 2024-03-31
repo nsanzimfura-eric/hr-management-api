@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import CandidateService from "../services/candidates.service";
 import cloudinary from "../config/cloudinary.config";
 import JobsServices from "../services/jobs.service";
+import { isEmail } from "../validators/isEmail.validator";
 
 const candidateServices = new CandidateService();
 const jobsServices = new JobsServices();
@@ -17,6 +18,13 @@ const CandidatesController = {
       return res.status(400).json({
         success: false,
         message: "Resume,name, email, and phone are required",
+      });
+    }
+    //email validation
+    if (isEmail(email)) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid email type",
       });
     }
     //only allow pdf files

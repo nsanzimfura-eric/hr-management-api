@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import AccountServiceClass from "../services/account.service";
+import { isEmail } from "../validators/isEmail.validator";
 
 const AccountService = new AccountServiceClass();
 
@@ -13,6 +14,13 @@ const AccountController = {
       return res.status(400).json({
         success: false,
         message: "Names and email are required",
+      });
+    }
+    //email validation
+    if (isEmail(email)) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid email type",
       });
     }
 
@@ -69,6 +77,14 @@ const AccountController = {
         success: false,
         message: "Email and password are required!",
       });
+
+    //email validation
+    if (isEmail(email)) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid email type",
+      });
+    }
 
     const lowerCaseEmail = email.trim().toLowerCase();
 
