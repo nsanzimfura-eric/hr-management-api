@@ -21,7 +21,7 @@ const CandidatesController = {
       });
     }
     //email validation
-    if (isEmail(email)) {
+    if (!isEmail(email)) {
       return res.status(400).json({
         success: false,
         message: "Invalid email type",
