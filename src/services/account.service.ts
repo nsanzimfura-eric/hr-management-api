@@ -53,7 +53,11 @@ class AccountService {
       if (!passwordMatch) {
         return false;
       }
-      return generateToken(user);
+      const token = generateToken(user);
+      return {
+        ...user,
+        token,
+      };
     } catch (error) {
       throw error;
     }

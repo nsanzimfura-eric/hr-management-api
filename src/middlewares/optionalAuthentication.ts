@@ -5,7 +5,7 @@ import jwt from "jsonwebtoken";
 
 const optionalAuthentication = (
   req: Request | any,
-  res: Response,
+  _: Response,
   next: NextFunction
 ) => {
   let token: string | null = null;
@@ -17,11 +17,10 @@ const optionalAuthentication = (
 
   if (token) {
     jwt.verify(token, process.env.JWT_SECRET, (err: Error, decoded: any) => {
-      if (err) {
-        return res.status(401).json({ message: "Token is invalid or expired" });
+      if (!err) {
+        // @ts-ignore
+        decodedUser = decoded;
       }
-      // @ts-ignore
-      decodedUser = decoded;
     });
   }
   req.user = decodedUser;

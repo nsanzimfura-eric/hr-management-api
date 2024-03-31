@@ -19,7 +19,7 @@
  *               password:
  *                 type: string
  *     responses:
- *       200:
+ *       201:
  *         description: Successfully authenticated.
  *         content:
  *           application/json:
