@@ -31,7 +31,9 @@ class JobsServices {
 
   async fetchJobs(): Promise<Job[]> {
     try {
-      return await this.JobsRepository.find();
+      return await this.JobsRepository.find({
+        relations: { candidates: true },
+      });
     } catch (error) {
       throw error;
     }
