@@ -37,7 +37,7 @@
   "scripts": {
     "typeorm": "typeorm-ts-node-commonjs",
     "build": "tsc",
-    "start": "nodemon --npx ts-node --esm src/index.ts",
+    "start": "node build/index.js",
     "dev": "nodemon --npx ts-node --esm src/index.ts",
     "seed": "ts-node ./src/seeders/index.ts"
   },
