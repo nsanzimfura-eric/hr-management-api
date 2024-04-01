@@ -38,7 +38,7 @@
   "scripts": {
     "typeorm": "typeorm-ts-node-commonjs",
     "build": "tsc",
-    "start": "pm2 start build/index.js --name hr-management-system",
+    "start": "nodemon --npx ts-node --esm src/index.ts",
     "dev": "nodemon --npx ts-node --esm src/index.ts",
     "seed": "ts-node ./src/seeders/index.ts"
   },

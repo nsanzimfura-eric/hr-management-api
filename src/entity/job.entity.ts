@@ -35,21 +35,6 @@ export class Job {
   @UpdateDateColumn({ name: "updated_at" })
   updatedAt!: Date;
 
-  //relations ----
-
-  // @ManyToMany(() => Candidate, (candidate) => candidate.jobs, {
-  //   onDelete: "CASCADE",
-  //   onUpdate: "CASCADE",
-  //   eager: false,
-  // })
-  // @JoinTable({
-  //   name: "jobs_candidates",
-  //   joinColumn: { name: "job_id", referencedColumnName: "id" },
-  //   inverseJoinColumn: { name: "candidate_id", referencedColumnName: "id" },
-  // })
-  // candidates: Candidate[];
-
-  //by simple demo, no joinTable or bi-directional relationship
   @ManyToMany(() => Candidate)
   @JoinTable()
   candidates: Candidate[];
